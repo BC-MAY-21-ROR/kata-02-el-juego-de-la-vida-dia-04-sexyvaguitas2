@@ -68,15 +68,15 @@
           </div>
           <div class="code-statistics col-md-11">
             <div class="col-md-3">
-              <div><span class="metric">190</span><small> lines of codes</small></div>
-              <div><span class="metric">18</span><small> methods</small></div>
+              <div><span class="metric">181</span><small> lines of codes</small></div>
+              <div><span class="metric">17</span><small> methods</small></div>
             </div>
             <div class="col-md-3">
-              <div><span class="metric">7.6</span><small> complexity/method</small></div>
-              <div><span class="metric">0</span><small> churn</small></div>
+              <div><span class="metric">7.0</span><small> complexity/method</small></div>
+              <div><span class="metric">1</span><small> churn</small></div>
             </div>
             <div class="col-md-3">
-              <div><span class="metric">135.99</span><small> complexity</small></div>
+              <div><span class="metric">118.37</span><small> complexity</small></div>
               <div><span class="metric">0</span><small> duplications</small></div>
             </div>
           </div>
@@ -88,7 +88,7 @@
             <li><a href="#" id="toggle-code" class="toggle-button button">code</a></li>
             <li class="active">
               <a href="#" id="toggle-smells" class="toggle-button button">
-                23
+                21
                 smells
               </a>
             </li>
@@ -101,8 +101,10 @@
 
 # El juego de la vida
 
-# Clase para crear celulas con el estatus de vivas o muertas
+# Clase celula que permite aplicar las reglas a las celulas
 class Cell
+  attr_accessor :status<ol class="nocode errors smells">  <li>    <div class="description">      <div class="heading">        <span>          <i class="fa fa-warning" aria-hidden="true"></i>          <a href="https://github.com/troessner/reek/blob/master/docs/Attribute.md" target="_blank"><b>Attribute</b></a>        </span>      </div>      <span>Cell#status is a writable attribute</span>          </div>  </li></ol>
+
   def initialize
     # Metodo para inicializar la celula
     @status = &#39;Dead&#39;
@@ -134,8 +136,8 @@ class Cell
   end
 end
 
-# Clase para crear tableros que contienen todos los metodos para iniciarlizar el juego y actualizar generaciones
-class Board
+# Clase que genera el tablero y nos permite aplicar las reglas en las celulas
+class Board<ol class="nocode errors smells">  <li>    <div class="description">      <div class="heading">        <span>          <i class="fa fa-warning" aria-hidden="true"></i>          <a href="https://github.com/troessner/reek/blob/master/docs/Instance-Variable-Assumption.md" target="_blank"><b>InstanceVariableAssumption</b></a>        </span>      </div>      <span>Board assumes too much for instance variable '@grid'</span>          </div>  </li></ol>
   attr_accessor :grid, :rows, :columns<ol class="nocode errors smells">  <li>    <div class="description">      <div class="heading">        <span>          <i class="fa fa-warning" aria-hidden="true"></i>          <a href="https://github.com/troessner/reek/blob/master/docs/Attribute.md" target="_blank"><b>Attribute</b></a>        </span>      </div>      <span>Board#columns is a writable attribute</span>          </div>  </li>  <li>    <div class="description">      <div class="heading">        <span>          <i class="fa fa-warning" aria-hidden="true"></i>          <a href="https://github.com/troessner/reek/blob/master/docs/Attribute.md" target="_blank"><b>Attribute</b></a>        </span>      </div>      <span>Board#grid is a writable attribute</span>          </div>  </li>  <li>    <div class="description">      <div class="heading">        <span>          <i class="fa fa-warning" aria-hidden="true"></i>          <a href="https://github.com/troessner/reek/blob/master/docs/Attribute.md" target="_blank"><b>Attribute</b></a>        </span>      </div>      <span>Board#rows is a writable attribute</span>          </div>  </li></ol>
 
   def initialize
@@ -143,7 +145,6 @@ class Board
     # Ademas de ejecutrar los metodos en la secuencia necesaria
     @rows = 0
     @columns = 0
-    @grid = Array.new(@rows) { Array.new(@columns) { Cell.new } }
   end
 
   def generate_board
@@ -154,7 +155,7 @@ class Board
     @rows.times do |row|
       @columns.times do |column|
         random_chance = rand(2) # 25%
-        @grid[i][j].set_alive if random_chance == 1
+        @grid[row][column].set_alive if random_chance == 1
       end
     end
   end
@@ -163,7 +164,7 @@ class Board
     # Metodo para dibujar el tablero en la terminal
     @rows.times do |row|
       @columns.times do |column|
-        print &quot;#{@grid[i][j].display_character} &quot;
+        print &quot;#{@grid[row][column].display_character} &quot;
       end
       print &quot;\n&quot;
     end
@@ -176,13 +177,13 @@ class Board
     dead_cells = []
     @rows.times do |row|
       @columns.times do |column|
-        cells_checker(i, j, alive_cells, dead_cells)
+        cells_checker(row, column, alive_cells, dead_cells)
       end
     end
     kill_or_revive(alive_cells, dead_cells)
   end
 
-  def cells_checker(row, column, alive_cells, dead_cells)<ol class="nocode errors smells">  <li>    <div class="description">      <div class="heading">        <span>          <i class="fa fa-warning" aria-hidden="true"></i>          <a href="https://github.com/troessner/reek/blob/master/docs/Data-Clump.md" target="_blank"><b>DataClump</b></a>        </span>      </div>      <span>Board takes parameters ['alive_cells', 'dead_cells'] to 4 methods</span>              <span>Locations:</span>                  <a href="game_of_life.html#L86" class="js-smell-location">0</a>                  <a href="game_of_life.html#L103" class="js-smell-location">1</a>                  <a href="game_of_life.html#L112" class="js-smell-location">2</a>                  <a href="game_of_life.html#L121" class="js-smell-location">3</a>                  </div>  </li>  <li>    <div class="description">      <div class="heading">        <span>          <i class="fa fa-warning" aria-hidden="true"></i>          <a href="https://github.com/troessner/reek/blob/master/docs/Long-Parameter-List.md" target="_blank"><b>LongParameterList</b></a>        </span>      </div>      <span>Board#cells_checker has 4 parameters</span>          </div>  </li></ol>
+  def cells_checker(row, column, alive_cells, dead_cells)<ol class="nocode errors smells">  <li>    <div class="description">      <div class="heading">        <span>          <i class="fa fa-warning" aria-hidden="true"></i>          <a href="https://github.com/troessner/reek/blob/master/docs/Data-Clump.md" target="_blank"><b>DataClump</b></a>        </span>      </div>      <span>Board takes parameters ['alive_cells', 'dead_cells'] to 4 methods</span>              <span>Locations:</span>                  <a href="game_of_life.html#L87" class="js-smell-location">0</a>                  <a href="game_of_life.html#L104" class="js-smell-location">1</a>                  <a href="game_of_life.html#L113" class="js-smell-location">2</a>                  <a href="game_of_life.html#L122" class="js-smell-location">3</a>                  </div>  </li>  <li>    <div class="description">      <div class="heading">        <span>          <i class="fa fa-warning" aria-hidden="true"></i>          <a href="https://github.com/troessner/reek/blob/master/docs/Long-Parameter-List.md" target="_blank"><b>LongParameterList</b></a>        </span>      </div>      <span>Board#cells_checker has 4 parameters</span>          </div>  </li></ol>
     # Checamos la celula actual y su estado
     cell_object = @grid[row][column]
     status_maincell = cell_object.alive?
@@ -199,7 +200,7 @@ class Board
     end
   end
 
-  def status_maincells(status_maincell, living_neighbourscount, dead_cells, alive_cells, cell_object)<ol class="nocode errors smells">  <li>    <div class="description">      <div class="heading">        <span>          <i class="fa fa-warning" aria-hidden="true"></i>          <a href="https://github.com/troessner/reek/blob/master/docs/Data-Clump.md" target="_blank"><b>DataClump</b></a>        </span>      </div>      <span>Board takes parameters ['alive_cells', 'dead_cells'] to 4 methods</span>              <span>Locations:</span>                  <a href="game_of_life.html#L86" class="js-smell-location">0</a>                  <a href="game_of_life.html#L103" class="js-smell-location">1</a>                  <a href="game_of_life.html#L112" class="js-smell-location">2</a>                  <a href="game_of_life.html#L121" class="js-smell-location">3</a>                  </div>  </li>  <li>    <div class="description">      <div class="heading">        <span>          <i class="fa fa-warning" aria-hidden="true"></i>          <a href="https://github.com/troessner/reek/blob/master/docs/Long-Parameter-List.md" target="_blank"><b>LongParameterList</b></a>        </span>      </div>      <span>Board#status_maincells has 5 parameters</span>          </div>  </li></ol>
+  def status_maincells(status_maincell, living_neighbourscount, dead_cells, alive_cells, cell_object)<ol class="nocode errors smells">  <li>    <div class="description">      <div class="heading">        <span>          <i class="fa fa-warning" aria-hidden="true"></i>          <a href="https://github.com/troessner/reek/blob/master/docs/Data-Clump.md" target="_blank"><b>DataClump</b></a>        </span>      </div>      <span>Board takes parameters ['alive_cells', 'dead_cells'] to 4 methods</span>              <span>Locations:</span>                  <a href="game_of_life.html#L87" class="js-smell-location">0</a>                  <a href="game_of_life.html#L104" class="js-smell-location">1</a>                  <a href="game_of_life.html#L113" class="js-smell-location">2</a>                  <a href="game_of_life.html#L122" class="js-smell-location">3</a>                  </div>  </li>  <li>    <div class="description">      <div class="heading">        <span>          <i class="fa fa-warning" aria-hidden="true"></i>          <a href="https://github.com/troessner/reek/blob/master/docs/Long-Parameter-List.md" target="_blank"><b>LongParameterList</b></a>        </span>      </div>      <span>Board#status_maincells has 5 parameters</span>          </div>  </li></ol>
     # Si la celula actual esta viva, checa el estado de los vecinos
     if status_maincell<ol class="nocode errors smells">  <li>    <div class="description">      <div class="heading">        <span>          <i class="fa fa-warning" aria-hidden="true"></i>          <a href="https://github.com/troessner/reek/blob/master/docs/Control-Parameter.md" target="_blank"><b>ControlParameter</b></a>        </span>      </div>      <span>Board#status_maincells is controlled by argument 'status_maincell'</span>          </div>  </li></ol>
       game_rules(living_neighbourscount, dead_cells, alive_cells, cell_object)
@@ -208,21 +209,21 @@ class Board
     end
   end
 
-  def game_rules(living_neighbourscount, dead_cells, alive_cells, cell_object)<ol class="nocode errors smells">  <li>    <div class="description">      <div class="heading">        <span>          <i class="fa fa-warning" aria-hidden="true"></i>          <a href="https://github.com/troessner/reek/blob/master/docs/Data-Clump.md" target="_blank"><b>DataClump</b></a>        </span>      </div>      <span>Board takes parameters ['alive_cells', 'dead_cells'] to 4 methods</span>              <span>Locations:</span>                  <a href="game_of_life.html#L86" class="js-smell-location">0</a>                  <a href="game_of_life.html#L103" class="js-smell-location">1</a>                  <a href="game_of_life.html#L112" class="js-smell-location">2</a>                  <a href="game_of_life.html#L121" class="js-smell-location">3</a>                  </div>  </li>  <li>    <div class="description">      <div class="heading">        <span>          <i class="fa fa-warning" aria-hidden="true"></i>          <a href="https://github.com/troessner/reek/blob/master/docs/Long-Parameter-List.md" target="_blank"><b>LongParameterList</b></a>        </span>      </div>      <span>Board#game_rules has 4 parameters</span>          </div>  </li>  <li>    <div class="description">      <div class="heading">        <span>          <i class="fa fa-warning" aria-hidden="true"></i>          <a href="https://github.com/troessner/reek/blob/master/docs/Utility-Function.md" target="_blank"><b>UtilityFunction</b></a>        </span>      </div>      <span>Board#game_rules doesn't depend on instance state (maybe move it to another class?)</span>          </div>  </li></ol>
+  def game_rules(living_neighbourscount, dead_cells, alive_cells, cell_object)<ol class="nocode errors smells">  <li>    <div class="description">      <div class="heading">        <span>          <i class="fa fa-warning" aria-hidden="true"></i>          <a href="https://github.com/troessner/reek/blob/master/docs/Data-Clump.md" target="_blank"><b>DataClump</b></a>        </span>      </div>      <span>Board takes parameters ['alive_cells', 'dead_cells'] to 4 methods</span>              <span>Locations:</span>                  <a href="game_of_life.html#L87" class="js-smell-location">0</a>                  <a href="game_of_life.html#L104" class="js-smell-location">1</a>                  <a href="game_of_life.html#L113" class="js-smell-location">2</a>                  <a href="game_of_life.html#L122" class="js-smell-location">3</a>                  </div>  </li>  <li>    <div class="description">      <div class="heading">        <span>          <i class="fa fa-warning" aria-hidden="true"></i>          <a href="https://github.com/troessner/reek/blob/master/docs/Long-Parameter-List.md" target="_blank"><b>LongParameterList</b></a>        </span>      </div>      <span>Board#game_rules has 4 parameters</span>          </div>  </li>  <li>    <div class="description">      <div class="heading">        <span>          <i class="fa fa-warning" aria-hidden="true"></i>          <a href="https://github.com/troessner/reek/blob/master/docs/Utility-Function.md" target="_blank"><b>UtilityFunction</b></a>        </span>      </div>      <span>Board#game_rules doesn't depend on instance state (maybe move it to another class?)</span>          </div>  </li></ol>
     # Revisa cuantos vecinos vivos tiene para aplicar la regla.
-    if (living_neighbourscount.length &lt; 2) || (living_neighbourscount.length &gt; 3)<ol class="nocode errors smells">  <li>    <div class="description">      <div class="heading">        <span>          <i class="fa fa-warning" aria-hidden="true"></i>          <a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank"><b>DuplicateMethodCall</b></a>        </span>      </div>      <span>Board#game_rules calls 'living_neighbourscount.length' 4 times</span>              <span>Locations:</span>                  <a href="game_of_life.html#L114" class="js-smell-location">0</a>                  <a href="game_of_life.html#L116" class="js-smell-location">1</a>                  </div>  </li></ol>
+    if (living_neighbourscount.length &lt; 2) || (living_neighbourscount.length &gt; 3)<ol class="nocode errors smells">  <li>    <div class="description">      <div class="heading">        <span>          <i class="fa fa-warning" aria-hidden="true"></i>          <a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank"><b>DuplicateMethodCall</b></a>        </span>      </div>      <span>Board#game_rules calls 'living_neighbourscount.length' 4 times</span>              <span>Locations:</span>                  <a href="game_of_life.html#L115" class="js-smell-location">0</a>                  <a href="game_of_life.html#L117" class="js-smell-location">1</a>                  </div>  </li></ol>
       dead_cells.push(cell_object)
-    elsif (living_neighbourscount.length == 3) || (living_neighbourscount.length == 2)<ol class="nocode errors smells">  <li>    <div class="description">      <div class="heading">        <span>          <i class="fa fa-warning" aria-hidden="true"></i>          <a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank"><b>DuplicateMethodCall</b></a>        </span>      </div>      <span>Board#game_rules calls 'living_neighbourscount.length' 4 times</span>              <span>Locations:</span>                  <a href="game_of_life.html#L114" class="js-smell-location">0</a>                  <a href="game_of_life.html#L116" class="js-smell-location">1</a>                  </div>  </li></ol>
+    elsif (living_neighbourscount.length == 3) || (living_neighbourscount.length == 2)<ol class="nocode errors smells">  <li>    <div class="description">      <div class="heading">        <span>          <i class="fa fa-warning" aria-hidden="true"></i>          <a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank"><b>DuplicateMethodCall</b></a>        </span>      </div>      <span>Board#game_rules calls 'living_neighbourscount.length' 4 times</span>              <span>Locations:</span>                  <a href="game_of_life.html#L115" class="js-smell-location">0</a>                  <a href="game_of_life.html#L117" class="js-smell-location">1</a>                  </div>  </li></ol>
       alive_cells.push(cell_object)
     end
   end
 
-  def kill_or_revive(alive_cells, dead_cells)<ol class="nocode errors smells">  <li>    <div class="description">      <div class="heading">        <span>          <i class="fa fa-warning" aria-hidden="true"></i>          <a href="https://github.com/troessner/reek/blob/master/docs/Data-Clump.md" target="_blank"><b>DataClump</b></a>        </span>      </div>      <span>Board takes parameters ['alive_cells', 'dead_cells'] to 4 methods</span>              <span>Locations:</span>                  <a href="game_of_life.html#L86" class="js-smell-location">0</a>                  <a href="game_of_life.html#L103" class="js-smell-location">1</a>                  <a href="game_of_life.html#L112" class="js-smell-location">2</a>                  <a href="game_of_life.html#L121" class="js-smell-location">3</a>                  </div>  </li>  <li>    <div class="description">      <div class="heading">        <span>          <i class="fa fa-warning" aria-hidden="true"></i>          <a href="https://github.com/troessner/reek/blob/master/docs/Utility-Function.md" target="_blank"><b>UtilityFunction</b></a>        </span>      </div>      <span>Board#kill_or_revive doesn't depend on instance state (maybe move it to another class?)</span>          </div>  </li></ol>
+  def kill_or_revive(alive_cells, dead_cells)<ol class="nocode errors smells">  <li>    <div class="description">      <div class="heading">        <span>          <i class="fa fa-warning" aria-hidden="true"></i>          <a href="https://github.com/troessner/reek/blob/master/docs/Data-Clump.md" target="_blank"><b>DataClump</b></a>        </span>      </div>      <span>Board takes parameters ['alive_cells', 'dead_cells'] to 4 methods</span>              <span>Locations:</span>                  <a href="game_of_life.html#L87" class="js-smell-location">0</a>                  <a href="game_of_life.html#L104" class="js-smell-location">1</a>                  <a href="game_of_life.html#L113" class="js-smell-location">2</a>                  <a href="game_of_life.html#L122" class="js-smell-location">3</a>                  </div>  </li>  <li>    <div class="description">      <div class="heading">        <span>          <i class="fa fa-warning" aria-hidden="true"></i>          <a href="https://github.com/troessner/reek/blob/master/docs/Utility-Function.md" target="_blank"><b>UtilityFunction</b></a>        </span>      </div>      <span>Board#kill_or_revive doesn't depend on instance state (maybe move it to another class?)</span>          </div>  </li></ol>
     alive_cells.each(&amp;:set_alive)
     dead_cells.each(&amp;:set_dead)
   end
 
-  def check_neighbour(check_row, check_column)<ol class="nocode errors smells">  <li>    <div class="description">      <div class="heading">        <span>          <i class="fa fa-warning" aria-hidden="true"></i>          <a href="https://github.com/troessner/reek/blob/master/docs/Data-Clump.md" target="_blank"><b>DataClump</b></a>        </span>      </div>      <span>Board takes parameters ['check_column', 'check_row'] to 4 methods</span>              <span>Locations:</span>                  <a href="game_of_life.html#L126" class="js-smell-location">0</a>                  <a href="game_of_life.html#L135" class="js-smell-location">1</a>                  <a href="game_of_life.html#L145" class="js-smell-location">2</a>                  <a href="game_of_life.html#L157" class="js-smell-location">3</a>                  </div>  </li></ol>
+  def check_neighbour(check_row, check_column)<ol class="nocode errors smells">  <li>    <div class="description">      <div class="heading">        <span>          <i class="fa fa-warning" aria-hidden="true"></i>          <a href="https://github.com/troessner/reek/blob/master/docs/Data-Clump.md" target="_blank"><b>DataClump</b></a>        </span>      </div>      <span>Board takes parameters ['check_column', 'check_row'] to 3 methods</span>              <span>Locations:</span>                  <a href="game_of_life.html#L127" class="js-smell-location">0</a>                  <a href="game_of_life.html#L136" class="js-smell-location">1</a>                  <a href="game_of_life.html#L146" class="js-smell-location">2</a>                  </div>  </li></ol>
     # Metodo para checar todos los vecinos de todas las celulas
     search_min = -1
     search_max = 1
@@ -231,7 +232,7 @@ class Board
     neighbour_list
   end
 
-  def check_near_cells(search_min, search_max, neighbour_list, check_row, check_column)<ol class="nocode errors smells">  <li>    <div class="description">      <div class="heading">        <span>          <i class="fa fa-warning" aria-hidden="true"></i>          <a href="https://github.com/troessner/reek/blob/master/docs/Data-Clump.md" target="_blank"><b>DataClump</b></a>        </span>      </div>      <span>Board takes parameters ['check_column', 'check_row'] to 4 methods</span>              <span>Locations:</span>                  <a href="game_of_life.html#L126" class="js-smell-location">0</a>                  <a href="game_of_life.html#L135" class="js-smell-location">1</a>                  <a href="game_of_life.html#L145" class="js-smell-location">2</a>                  <a href="game_of_life.html#L157" class="js-smell-location">3</a>                  </div>  </li>  <li>    <div class="description">      <div class="heading">        <span>          <i class="fa fa-warning" aria-hidden="true"></i>          <a href="https://github.com/troessner/reek/blob/master/docs/Long-Parameter-List.md" target="_blank"><b>LongParameterList</b></a>        </span>      </div>      <span>Board#check_near_cells has 5 parameters</span>          </div>  </li></ol>
+  def check_near_cells(search_min, search_max, neighbour_list, check_row, check_column)<ol class="nocode errors smells">  <li>    <div class="description">      <div class="heading">        <span>          <i class="fa fa-warning" aria-hidden="true"></i>          <a href="https://github.com/troessner/reek/blob/master/docs/Data-Clump.md" target="_blank"><b>DataClump</b></a>        </span>      </div>      <span>Board takes parameters ['check_column', 'check_row'] to 3 methods</span>              <span>Locations:</span>                  <a href="game_of_life.html#L127" class="js-smell-location">0</a>                  <a href="game_of_life.html#L136" class="js-smell-location">1</a>                  <a href="game_of_life.html#L146" class="js-smell-location">2</a>                  </div>  </li>  <li>    <div class="description">      <div class="heading">        <span>          <i class="fa fa-warning" aria-hidden="true"></i>          <a href="https://github.com/troessner/reek/blob/master/docs/Long-Parameter-List.md" target="_blank"><b>LongParameterList</b></a>        </span>      </div>      <span>Board#check_near_cells has 5 parameters</span>          </div>  </li></ol>
     (search_min..search_max).each do |i|<ol class="nocode errors smells">  <li>    <div class="description">      <div class="heading">        <span>          <i class="fa fa-warning" aria-hidden="true"></i>          <a href="https://github.com/troessner/reek/blob/master/docs/Uncommunicative-Variable-Name.md" target="_blank"><b>UncommunicativeVariableName</b></a>        </span>      </div>      <span>Board#check_near_cells has the variable name 'i'</span>          </div>  </li></ol>
       (search_min..search_max).each do |j|<ol class="nocode errors smells">  <li>    <div class="description">      <div class="heading">        <span>          <i class="fa fa-warning" aria-hidden="true"></i>          <a href="https://github.com/troessner/reek/blob/master/docs/Uncommunicative-Variable-Name.md" target="_blank"><b>UncommunicativeVariableName</b></a>        </span>      </div>      <span>Board#check_near_cells has the variable name 'j'</span>          </div>  </li></ol>
         neighbour_row = check_row + i
@@ -241,24 +242,14 @@ class Board
     end
   end
 
-  def validate_neighbour(neighbour_row, neighbour_column, check_row, check_column, neighbour_list)<ol class="nocode errors smells">  <li>    <div class="description">      <div class="heading">        <span>          <i class="fa fa-warning" aria-hidden="true"></i>          <a href="https://github.com/troessner/reek/blob/master/docs/Data-Clump.md" target="_blank"><b>DataClump</b></a>        </span>      </div>      <span>Board takes parameters ['check_column', 'check_row'] to 4 methods</span>              <span>Locations:</span>                  <a href="game_of_life.html#L126" class="js-smell-location">0</a>                  <a href="game_of_life.html#L135" class="js-smell-location">1</a>                  <a href="game_of_life.html#L145" class="js-smell-location">2</a>                  <a href="game_of_life.html#L157" class="js-smell-location">3</a>                  </div>  </li>  <li>    <div class="description">      <div class="heading">        <span>          <i class="fa fa-warning" aria-hidden="true"></i>          <a href="https://github.com/troessner/reek/blob/master/docs/Long-Parameter-List.md" target="_blank"><b>LongParameterList</b></a>        </span>      </div>      <span>Board#validate_neighbour has 5 parameters</span>          </div>  </li></ol>
+  def validate_neighbour(neighbour_row, neighbour_column, check_row, check_column, neighbour_list)<ol class="nocode errors smells">  <li>    <div class="description">      <div class="heading">        <span>          <i class="fa fa-warning" aria-hidden="true"></i>          <a href="https://github.com/troessner/reek/blob/master/docs/Data-Clump.md" target="_blank"><b>DataClump</b></a>        </span>      </div>      <span>Board takes parameters ['check_column', 'check_row'] to 3 methods</span>              <span>Locations:</span>                  <a href="game_of_life.html#L127" class="js-smell-location">0</a>                  <a href="game_of_life.html#L136" class="js-smell-location">1</a>                  <a href="game_of_life.html#L146" class="js-smell-location">2</a>                  </div>  </li>  <li>    <div class="description">      <div class="heading">        <span>          <i class="fa fa-warning" aria-hidden="true"></i>          <a href="https://github.com/troessner/reek/blob/master/docs/Long-Parameter-List.md" target="_blank"><b>LongParameterList</b></a>        </span>      </div>      <span>Board#validate_neighbour has 5 parameters</span>          </div>  </li></ol>
     valid_neighbour = true
-    if actual_cel?(neighbour_row, neighbour_column, check_row, check_column)
+    if (neighbour_row == check_row) &amp;&amp; (neighbour_column == check_column)<ol class="nocode errors smells">  <li>    <div class="description">      <div class="heading">        <span>          <i class="fa fa-warning" aria-hidden="true"></i>          <a href="https://github.com/troessner/reek/blob/master/docs/Control-Parameter.md" target="_blank"><b>ControlParameter</b></a>        </span>      </div>      <span>Board#validate_neighbour is controlled by argument 'check_column'</span>          </div>  </li>  <li>    <div class="description">      <div class="heading">        <span>          <i class="fa fa-warning" aria-hidden="true"></i>          <a href="https://github.com/troessner/reek/blob/master/docs/Control-Parameter.md" target="_blank"><b>ControlParameter</b></a>        </span>      </div>      <span>Board#validate_neighbour is controlled by argument 'check_row'</span>          </div>  </li></ol>
       valid_neighbour = false
-    elsif neighbour_row.negative? || (neighbour_row &gt;= @rows)
-      valid_neighbour = false
-    elsif neighbour_column.negative? || (neighbour_column &gt;= @columns)
+    elsif neighbour_row.negative? || (neighbour_row &gt;= @rows) || (neighbour_column &gt;= @columns)
       valid_neighbour = false
     end
     neighbour_list.push(@grid[neighbour_row][neighbour_column]) if valid_neighbour
-  end
-
-  def actual_cel?(neighbour_row, neighbour_column, check_row, check_column)<ol class="nocode errors smells">  <li>    <div class="description">      <div class="heading">        <span>          <i class="fa fa-warning" aria-hidden="true"></i>          <a href="https://github.com/troessner/reek/blob/master/docs/Data-Clump.md" target="_blank"><b>DataClump</b></a>        </span>      </div>      <span>Board takes parameters ['check_column', 'check_row'] to 4 methods</span>              <span>Locations:</span>                  <a href="game_of_life.html#L126" class="js-smell-location">0</a>                  <a href="game_of_life.html#L135" class="js-smell-location">1</a>                  <a href="game_of_life.html#L145" class="js-smell-location">2</a>                  <a href="game_of_life.html#L157" class="js-smell-location">3</a>                  </div>  </li>  <li>    <div class="description">      <div class="heading">        <span>          <i class="fa fa-warning" aria-hidden="true"></i>          <a href="https://github.com/troessner/reek/blob/master/docs/Long-Parameter-List.md" target="_blank"><b>LongParameterList</b></a>        </span>      </div>      <span>Board#actual_cel? has 4 parameters</span>          </div>  </li>  <li>    <div class="description">      <div class="heading">        <span>          <i class="fa fa-warning" aria-hidden="true"></i>          <a href="https://github.com/troessner/reek/blob/master/docs/Utility-Function.md" target="_blank"><b>UtilityFunction</b></a>        </span>      </div>      <span>Board#actual_cel? doesn't depend on instance state (maybe move it to another class?)</span>          </div>  </li></ol>
-    if neighbour_row == check_row || neighbour_column == check_column<ol class="nocode errors smells">  <li>    <div class="description">      <div class="heading">        <span>          <i class="fa fa-warning" aria-hidden="true"></i>          <a href="https://github.com/troessner/reek/blob/master/docs/Control-Parameter.md" target="_blank"><b>ControlParameter</b></a>        </span>      </div>      <span>Board#actual_cel? is controlled by argument 'check_column'</span>          </div>  </li>  <li>    <div class="description">      <div class="heading">        <span>          <i class="fa fa-warning" aria-hidden="true"></i>          <a href="https://github.com/troessner/reek/blob/master/docs/Control-Parameter.md" target="_blank"><b>ControlParameter</b></a>        </span>      </div>      <span>Board#actual_cel? is controlled by argument 'check_row'</span>          </div>  </li>  <li>    <div class="description">      <div class="heading">        <span>          <i class="fa fa-warning" aria-hidden="true"></i>          <a href="https://github.com/troessner/reek/blob/master/docs/Control-Parameter.md" target="_blank"><b>ControlParameter</b></a>        </span>      </div>      <span>Board#actual_cel? is controlled by argument 'neighbour_column'</span>          </div>  </li>  <li>    <div class="description">      <div class="heading">        <span>          <i class="fa fa-warning" aria-hidden="true"></i>          <a href="https://github.com/troessner/reek/blob/master/docs/Control-Parameter.md" target="_blank"><b>ControlParameter</b></a>        </span>      </div>      <span>Board#actual_cel? is controlled by argument 'neighbour_row'</span>          </div>  </li></ol>
-      true
-    else
-      false
-    end
   end
 end
 

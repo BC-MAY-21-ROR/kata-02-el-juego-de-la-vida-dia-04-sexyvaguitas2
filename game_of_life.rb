@@ -2,6 +2,7 @@
 
 # El juego de la vida
 
+# Clase celula que permite aplicar las reglas a las celulas
 class Cell
   attr_accessor :status
 
@@ -36,6 +37,7 @@ class Cell
   end
 end
 
+# Clase que genera el tablero y nos permite aplicar las reglas en las celulas
 class Board
   attr_accessor :grid, :rows, :columns
 
@@ -44,7 +46,6 @@ class Board
     # Ademas de ejecutrar los metodos en la secuencia necesaria
     @rows = 0
     @columns = 0
-    @grid = Array.new(@rows) { Array.new(@columns) { Cell.new } }
   end
 
   def generate_board
@@ -52,19 +53,19 @@ class Board
     print "Iniciando el talbero\n"
     @grid = Array.new(@rows) { Array.new(@columns) { Cell.new } }
 
-    @rows.times do |i|
-      @columns.times do |j|
+    @rows.times do |row|
+      @columns.times do |column|
         random_chance = rand(2) # 25%
-        @grid[i][j].set_alive if random_chance == 1
+        @grid[row][column].set_alive if random_chance == 1
       end
     end
   end
 
   def draw_board
     # Metodo para dibujar el tablero en la terminal
-    @rows.times do |i|
-      @columns.times do |j|
-        print "#{@grid[i][j].display_character} "
+    @rows.times do |row|
+      @columns.times do |column|
+        print "#{@grid[row][column].display_character} "
       end
       print "\n"
     end
@@ -75,9 +76,9 @@ class Board
     # Lista de celulas vivas que se van a matar o resucitar o se mantienen vivas
     alive_cells = []
     dead_cells = []
-    @rows.times do |i|
-      @columns.times do |j|
-        cells_checker(i, j, alive_cells, dead_cells)
+    @rows.times do |row|
+      @columns.times do |column|
+        cells_checker(row, column, alive_cells, dead_cells)
       end
     end
     kill_or_revive(alive_cells, dead_cells)
@@ -91,7 +92,6 @@ class Board
     check_neighbour = self.check_neighbour(row, column)
     living_neighbourscount = []
     alive_neighbours(check_neighbour, living_neighbourscount)
-    print living_neighbourscount.length
     status_maincells(status_maincell, living_neighbourscount, dead_cells, alive_cells, cell_object)
   end
 
@@ -145,22 +145,12 @@ class Board
 
   def validate_neighbour(neighbour_row, neighbour_column, check_row, check_column, neighbour_list)
     valid_neighbour = true
-    if actual_cel?(neighbour_row, neighbour_column, check_row, check_column)
+    if (neighbour_row == check_row) && (neighbour_column == check_column)
       valid_neighbour = false
-    elsif neighbour_row.negative? || (neighbour_row >= @rows)
-      valid_neighbour = false
-    elsif neighbour_column.negative? || (neighbour_column >= @columns)
+    elsif neighbour_row.negative? || (neighbour_row >= @rows) || (neighbour_column >= @columns)
       valid_neighbour = false
     end
     neighbour_list.push(@grid[neighbour_row][neighbour_column]) if valid_neighbour
-  end
-
-  def actual_cel?(neighbour_row, neighbour_column, check_row, check_column)
-    if neighbour_row == check_row || neighbour_column == check_column
-      true
-    else
-      false
-    end
   end
 end
 
